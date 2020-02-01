@@ -13,7 +13,7 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String removeString(String base, String remove) {
-        return null; //TODO
+      return base.replace(remove, "");
     }
 
     /**
@@ -24,7 +24,10 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public boolean isQuestionString(String text) {
-        return false; //TODO
+      if (text.length() > 0) {
+        return text.charAt(text.length() - 1) == '?';
+      }
+      return false;
     }
 
     /**
@@ -35,7 +38,11 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String concatenate(String... elements) {
-        return null; //TODO
+      String s = "";
+      for (String tempString : elements) {
+        s += tempString;
+      }
+      return s;
     }
 
     /**
@@ -47,7 +54,15 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String toJumpCase(String text) {
-        return null; //TODO
+      String newText = "";
+      for (int i = 0; i < text.length(); i++) {
+        if (i % 2 != 0) {
+          newText += text.toUpperCase().charAt(i);
+        } else {
+          newText += text.toLowerCase().charAt(i);
+        }
+      }
+      return newText;
     }
 
     /**
@@ -59,6 +74,12 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public boolean isPalindrome(String string) {
-       return false; //TODO
+      if (string.length() < 1) {
+        return false;
+      }
+      StringBuffer s = new StringBuffer(string);
+      s.reverse();
+      return string.toUpperCase().replace(" ", "")
+          .equals(s.toString().toUpperCase().replace(" ", ""));
     }
 }

@@ -2,6 +2,7 @@ package com.epam.izh.rd.online;
 
 import com.epam.izh.rd.online.service.RegExpService;
 import com.epam.izh.rd.online.service.SimpleRegExpService;
+import java.io.FileNotFoundException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,7 @@ public class RegExpServiceTest {
 
     @Test
     @DisplayName("Тест метода RegExpService.maskSensitiveData()")
-    void testMaskSensitiveData() {
+    void testMaskSensitiveData() throws FileNotFoundException {
         assertEquals("Вчера вечером со счета номер 4301 **** **** 2140 был совершен перевод на счет 5042 **** ****" +
                 " 2043 в размере ${payment_amount} рублей. На счету осталось ${balance} рублей",
                 regExpService.maskSensitiveData());
@@ -27,7 +28,7 @@ public class RegExpServiceTest {
 
     @Test
     @DisplayName("Тест метода RegExpService.maskSensitiveData()")
-    void testGetPrecisionNumber() {
+    void testGetPrecisionNumber() throws FileNotFoundException {
         assertEquals("Вчера вечером со счета номер 4301 0234 2145 2140 был совершен перевод на счет 5042 2012 0532 2043" +
                         " в размере 1 рублей. На счету осталось 2 рублей",
                 regExpService.replacePlaceholders(1, 2));

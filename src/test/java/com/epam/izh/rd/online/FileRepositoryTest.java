@@ -2,6 +2,7 @@ package com.epam.izh.rd.online;
 
 import com.epam.izh.rd.online.repository.FileRepository;
 import com.epam.izh.rd.online.repository.SimpleFileRepository;
+import java.io.IOException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -48,7 +49,7 @@ public class FileRepositoryTest {
 
     @Test
     @DisplayName("Тест метода FileRepository.createFile(String path)")
-    void testCreateFile() {
+    void testCreateFile() throws IOException {
         fileRepository.createFile(TEST_DIR_CREATE_PATH, TEST_FILE_TO_CREATE);
 
         assertTrue(getFile(TEST_DIR_CREATE_PATH + "/" + TEST_FILE_TO_CREATE).exists());
@@ -56,7 +57,7 @@ public class FileRepositoryTest {
 
     @Test
     @DisplayName("Тест метода FileRepository.readFileFromResources(String fileName)")
-    void testReadFileFromResources() {
+    void testReadFileFromResources() throws IOException {
         assertEquals("Ya-hoo!", fileRepository.readFileFromResources("readme.txt"));
     }
 
