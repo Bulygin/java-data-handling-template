@@ -1,5 +1,14 @@
 package com.epam.izh.rd.online.repository;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 public class SimpleFileRepository implements FileRepository {
 
     /**
@@ -10,7 +19,16 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public long countFilesInDirectory(String path) {
-        return 0;
+        long c = 0;
+        File file = new File("src/main/resources/" + path);
+        if (file.isDirectory()) {
+            for (File newFile : file.listFiles()) {
+                c += countFilesInDirectory(path + "/" + newFile.getName());
+            }
+        } else {
+            c++;
+        }
+        return c;
     }
 
     /**
@@ -21,7 +39,15 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public long countDirsInDirectory(String path) {
-        return 0;
+        long c = 0;
+        File file = new File("src/main/resources/" + path);
+        if (file.isDirectory()) {
+            c++;
+            for (File newFile : file.listFiles()) {
+                c += countDirsInDirectory(path + "/" + newFile.getName());
+            }
+        }
+        return c;
     }
 
     /**
@@ -31,8 +57,14 @@ public class SimpleFileRepository implements FileRepository {
      * @param to   путь куда
      */
     @Override
-    public void copyTXTFiles(String from, String to) {
-        return;
+    public void copyTXTFiles(String from, String to) throws IOException {
+        File root = new File(from);
+        File[] list = root.listFiles();
+        for (File f : list) {
+            if (f.getName().contains(".txt")) {
+                Path p = Files.copy(f.toPath(), Paths.get(to + f.getName()));
+            }
+        }
     }
 
     /**
@@ -44,7 +76,19 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public boolean createFile(String path, String name) {
-        return false;
+
+        //Смог придумать 3 реализации этого метода, через File.createfiles(), BufferedReader и NIO,
+        //Все 3 создают файл, но тесты не проходит ни одна
+        //Оставил только способ "nio", т.к. закоменченый код запрещен.
+        // Буду крайне благодарен если обьясните где я ошибся.
+
+        try {
+            Path dir = Files.createDirectories(Paths.get(path));
+            OutputStream out = Files.newOutputStream(dir.resolve(name));
+            return true;
+        } catch (IOException ex) {
+            return false;
+        }
     }
 
     /**
@@ -54,7 +98,15 @@ public class SimpleFileRepository implements FileRepository {
      * @return контент
      */
     @Override
-    public String readFileFromResources(String fileName) {
-        return null;
+    public String readFileFromResources(String fileName) throws IOException {
+        String willReturn = "";
+        File f = new File("src/main/resources/" + fileName);
+        BufferedReader br = new BufferedReader(new FileReader(f));
+        String newString;
+        while ((newString = br.readLine()) != null) {
+            willReturn += newString;
+        }
+        return willReturn;
+
     }
 }
